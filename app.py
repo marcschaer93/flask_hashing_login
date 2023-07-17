@@ -1,4 +1,4 @@
-"""Flask app"""
+"""Flask App"""
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 # from models import db, connect_db 
