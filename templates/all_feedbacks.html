@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{%block title%} All Feedbacks{%endblock%} 
+
+{% block content %}
+<div class="container">
+    <h2 class="display-4">All Feedbacks</h2>
+    <ul>
+        {%for feedback in user.feedback%}
+        <div class="card border-primary mb-3" style="max-width: 20rem;">
+            <li style="list-style: none;">
+                <div class="card-header">
+                    <h4><b style="font-size: large;">Feedback: {{feedback.username}}</b></h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">{{feedback.title}}</h4>
+                    <p class="card-text">{{feedback.content}}</p>
+                    {%if session['username'] == feedback.username%}
+                    <form action="">
+                        <a href="" style="color: red; font-size: x-small;">DELETE</a>
+                        <a href="" style="color: green; font-size: x-small;">EDIT</a>
+                    </form>
+                    {%endif%}
+                </div>
+            </li>
+        </div>
+
+        {%endfor%}
+    </ul>
+
+    <div class="container">
+        <button onclick="window.location.href='/users/{{user.username}}/feedback/add'" type="submit" class="btn btn-primary btn-customized mt-4">
+            New Feedback
+        </button>
+    </div>
+</div>
+{% endblock %}

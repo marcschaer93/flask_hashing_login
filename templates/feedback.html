@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{%block title%}Feedback{%endblock%} 
+
+{% block content %}
+  <div>
+    <div class="row align-items-center" style="height: 80vh;">
+    <!-- <div class="row"> -->
+      <div class="mx-auto col-10 col-md-8 col-lg-6">
+        <!-- Form -->
+        <form class="form-example" action="" method="post">
+          <h1>Feedback</h1>
+          <p class="description">
+            Register for our site.
+          </p>
+          <!-- Input fields -->
+          {{ form.hidden_tag() }}
+
+          {% for field in form
+          if field.widget.input_type != 'hidden' %}
+          <div class="form-group">
+              <p>
+                {{ field.label }}
+                {{ field(class_="form-control") }}
+            
+                {% for error in field.errors %}
+                {{ error }}
+                {% endfor %}
+              </p>
+          </div>
+          {% endfor %}
+
+          <button onclick="window.location.href='/'"  class="btn btn-outline-danger btn-customized mt-4">
+            Back
+          </button>
+          <button type="submit" class="btn btn-success btn-customized mt-4">
+            Add
+          </button>
+        </form>
+        <!-- Form end -->
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{%block title%}User{%endblock%} 
+
+{% block content %}
+
+<div class="form-group container">
+    <div class="container">
+        <h2 class="display-4"><b>Username:</b> {{user.username}} </h2>
+    </div>
+
+    <div class="form-floating mb-3">
+        <label for="floatingInput">First Name</label>
+        <input value="{{user.first_name}}" type="text" class="form-control" id="floatingInput" placeholder="Fin">
+    </div>
+    <div class="form-floating mb-3">
+        <label for="floatingInput">Last Name</label>
+        <input value="{{user.last_name}}" type="email" class="form-control" id="floatingInput" placeholder="Underchurch">
+    </div>
+    <div class="form-floating mb-3">
+      <label for="floatingInput">Email address</label>
+      <input value="{{user.email}}" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+    </div>
+    <a href="/users/{{user.username}}/delete" method="post" style="color: red; font-size: x-small;">Delete Profile</a>
+</div>
+
+
+
+<div class="container">
+    <h2 class="display-4">Feedbacks</h2>
+    <ul>
+        {%for feedback in feedbacks%}
+        <div class="card border-primary mb-3" style="max-width: ;">
+            <li style="list-style: none;">
+                <div class="card-header">
+                    <h4><b style="font-size: large;">Feedback: {{feedback.username}}</b></h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">{{feedback.title}}</h4>
+                    <p class="card-text">{{feedback.content}}</p>
+                    {%if session['username'] == feedback.username%}
+                    <form action="">
+                        <a href="/feedback/{{feedback.id}}/delete" style="color: red; font-size: x-small;">DELETE</a>
+                        <a href="/feedback/{{feedback.id}}/update" style="color: green; font-size: x-small;">EDIT</a>
+                    </form>
+                    {%endif%}
+                </div>
+            </li>
+        </div>
+
+        {%endfor%}
+    </ul>
+
+    <div class="container">
+        <button onclick="window.location.href='/users/{{user.username}}/feedback/add'" type="submit" class="btn btn-primary btn-customized mt-4">
+            New Feedback
+        </button>
+    </div>
+</div>
+
+  {%endblock%}
