@@ -20,7 +20,8 @@ connect_db(app)
 with app.app_context():
     db.create_all()
 
-#----- ROUTES -----#
+##############----- ROUTES -----####################################
+####################################################################
 @app.route('/')
 def home():
     """Home"""
@@ -53,7 +54,6 @@ def register_user():
         except IntegrityError:
             form.username.errors.append('Username taken. Please pick another')
             return redirect('/login')
-        
         session['username'] = new_user.username
         flash('Registration was successfully', 'success')
         return redirect('/')
@@ -70,7 +70,6 @@ def login_user():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
-
         user = User.login(username, password)
         if user:
             flash('Successfully logged In!', 'success')
@@ -103,7 +102,6 @@ def show_user(username):
 @app.route('/users/<username>/delete', methods=["GET", "POST"])
 def delete_user(username):
     """Deletes a User completly togetehr with all self created Feedbacks"""
-
     if "username" not in session or username != session['username']:
         flash('Please Login first!', 'danger')
         return redirect('/login')
@@ -159,7 +157,6 @@ def update_feedback(id):
     if form.validate_on_submit():
         feedback.title = form.title.data
         feedback.content = form.content.data
-        
         db.session.commit()
         # return redirect(f"/users/{feedback.username}")
         return redirect('/feedbacks')
