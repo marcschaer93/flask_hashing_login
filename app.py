@@ -5,7 +5,6 @@ from models import User, Feedback, db, connect_db
 from forms import RegisterForm, LoginForm, FeedbackForm
 from sqlalchemy.exc import IntegrityError
 # from flask_cors import CORS
-# Create a FLASK instance
 app = Flask(__name__)
  # This will enable CORS for all routes of your app.
 # CORS(app)
@@ -13,13 +12,9 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///hashing_login'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-# SECRET KEY
 app.config['SECRET_KEY'] = "hyptokrypo"
-# DEBUG TOOLBAR
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-# initializes the Flask Debug Toolbar
 debug = DebugToolbarExtension(app)
-# connect to DATABASE
 connect_db(app)
 
 with app.app_context():
@@ -29,29 +24,29 @@ with app.app_context():
 @app.route('/')
 def home():
     """Home"""
-    
-    if "username" not in session or username != session['username']:
+    if "username" not in session:
         flash('Please Login first!', 'danger')
         return redirect('/login')
-        
-    return render_template('home.html')
+    else:   
+        return render_template('home.html')
 
 @app.route('/register', methods=["GET", "POST"])
 def register_user():
     """User registration"""
     form = RegisterForm()
-    
-    # if form.validate_on_submit():
-    #     user_data = {key: value.data for key, value in form._fields.items()}
-    #     new_user = User(**user_data)
-    
     if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        email = form.email.data
-        first_name = form.first_name.data
-        last_name = form.last_name.data
-        new_user = User.register(username, password, email, first_name, last_name)
+        user_data = {key: value for key, value in form.data.items() if key != 'csrf_token'}
+        new_user = User.register(**user_data)
+
+        """Longer but maybe more trustful"""
+        # if form.validate_on_submit():
+            # username = form.username.data
+            # password = form.password.data
+            # first_name = form.first_name.data
+            # last_name = form.last_name.data
+            # email = form.email.data
+            # new_user = User.register(username, password, first_name, last_name, email)
+
         db.session.add(new_user)
         try:
             db.session.commit()
@@ -137,7 +132,7 @@ def feedback(username):
         flash('New Feedback added', 'success')
         return redirect(f"/users/{username}")
     else:
-        return render_template('feedback.html', form=form)
+        return render_template('new_feedback.html', form=form)
 
 @app.route('/feedback/<int:id>/delete', methods=["GET", "POST"])
 def delete_feedback(id):
@@ -166,9 +161,17 @@ def update_feedback(id):
         feedback.content = form.content.data
         
         db.session.commit()
-        return redirect(f"/users/{feedback.username}")
+        # return redirect(f"/users/{feedback.username}")
+        return redirect('/feedbacks')
         
-    return render_template("update_feedback.html", form=form, feedback=feedback)
+    return render_template("edit_feedback.html", form=form, feedback=feedback)
+
+@app.route('/feedbacks')
+def show_all_feedbacks():
+    """Shows all Feedbacks"""
+    feedbacks = Feedback.query.all()
+    return render_template('feedbacks.html', feedbacks=feedbacks)
+
     
     
     

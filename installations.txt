@@ -4,3 +4,12 @@ pip3 install flask_sqlalchemy
 pip3 install psycopg2-binary
 pip3 install Flask-WTF
 pip3 install flask-bcrypt
+pip3 install WTForms-Alchemy
+
+
+from wtforms_alchemy import ModelForm
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+
+flask login
